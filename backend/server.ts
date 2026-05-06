@@ -13,8 +13,8 @@ async function startServer() {
   // Mock API Data
   app.get("/api/stats", (req, res) => {
     res.json({
-      usersHelped: "25,000+",
-      sessionsCompleted: "150,000",
+      usersHelped: "225",
+      sessionsCompleted: "15",
       resilienceImprovement: "68%"
     });
   });

@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
+import { Routes, Route, Link, useLocation } from 'react-router-dom';
 import { 
   Brain, 
   Phone, 
@@ -18,6 +19,14 @@ import {
 } from 'lucide-react';
 import { clsx, type ClassValue } from 'clsx';
 import { twMerge } from 'tailwind-merge';
+
+import Login from './Login';
+import AboutUs from './AboutUs';
+import Impacts from './Impacts';
+import Services from './Services';
+import Careers from './Careers';
+import Resources from './Resources';
+import Contact from './Contact';
 
 function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
@@ -55,19 +64,25 @@ const Navbar = ({ dark, toggleTheme }: { dark: boolean; toggleTheme: () => void 
   return (
     <nav className="bg-surface/95 backdrop-blur-md sticky top-0 z-50 border-b border-outline-variant/20 shadow-lg">
       <div className="max-w-7xl mx-auto px-6 h-20 md:h-24 flex justify-between items-center">
-        <a href="/" className="flex items-center gap-3">
+        <Link to="/" className="flex items-center gap-3">
           <div className="bg-secondary-container/20 p-1.5 rounded-lg border border-secondary/30">
             <Brain className="w-6 h-6 text-secondary" />
           </div>
           <span className="text-xl md:text-2xl font-heading font-bold text-on-surface tracking-tight">MindLift</span>
-        </a>
+        </Link>
 
         {/* Desktop Nav */}
         <div className="hidden md:flex gap-10 font-medium text-sm">
-          {['About', 'Services', 'Impact', 'Careers', 'Resources'].map((item) => (
-            <a key={item} href={`#${item.toLowerCase()}`} className="text-on-surface-variant hover:text-primary transition-colors">
-              {item}
-            </a>
+          {[
+            { name: 'About', path: '/about' },
+            { name: 'Services', path: '/services' },
+            { name: 'Impact', path: '/impacts' },
+            { name: 'Careers', path: '/careers' },
+            { name: 'Resources', path: '/resources' }
+          ].map((item) => (
+            <Link key={item.name} to={item.path} className="text-on-surface-variant hover:text-primary transition-colors">
+              {item.name}
+            </Link>
           ))}
         </div>
 
@@ -79,9 +94,9 @@ const Navbar = ({ dark, toggleTheme }: { dark: boolean; toggleTheme: () => void 
           >
             {dark ? <Sun className="w-4 h-4" /> : <Moon className="w-4 h-4" />}
           </button>
-          <button className="px-6 py-2.5 rounded-full border border-primary/30 text-primary font-mono text-xs uppercase tracking-widest hover:bg-primary/5 transition-all">
-            Donate
-          </button>
+          <Link to="/login" className="px-6 py-2.5 rounded-full border border-primary/30 text-primary font-mono text-xs uppercase tracking-widest hover:bg-primary/5 transition-all">
+            Login
+          </Link>
           <button className="px-6 py-2.5 rounded-full bg-error text-on-error font-mono text-xs uppercase tracking-widest hover:brightness-110 shadow-sm flex items-center gap-2 active:scale-95 transition-all">
             <Phone className="w-4 h-4 fill-current" />
             Get Help Now
@@ -104,10 +119,16 @@ const Navbar = ({ dark, toggleTheme }: { dark: boolean; toggleTheme: () => void 
             className="md:hidden bg-surface-container border-b border-outline-variant"
           >
             <div className="px-8 py-10 flex flex-col gap-6">
-              {['About', 'Services', 'Impact', 'Careers', 'Resources'].map((item) => (
-                <a key={item} href="#" className="font-medium text-on-surface hover:text-primary transition-colors" onClick={() => setIsOpen(false)}>
-                  {item}
-                </a>
+              {[
+                { name: 'About', path: '/about' },
+                { name: 'Services', path: '/services' },
+                { name: 'Impact', path: '/impacts' },
+                { name: 'Careers', path: '/careers' },
+                { name: 'Resources', path: '/resources' }
+              ].map((item) => (
+                <Link key={item.name} to={item.path} className="font-medium text-on-surface hover:text-primary transition-colors" onClick={() => setIsOpen(false)}>
+                  {item.name}
+                </Link>
               ))}
               <div className="flex flex-col gap-4 pt-6 border-t border-outline-variant">
                 <button 
@@ -117,7 +138,7 @@ const Navbar = ({ dark, toggleTheme }: { dark: boolean; toggleTheme: () => void 
                   {dark ? <Sun className="w-4 h-4" /> : <Moon className="w-4 h-4" />}
                   {dark ? 'Light Mode' : 'Dark Mode'}
                 </button>
-                <button className="w-full py-3.5 rounded-full border border-primary/30 text-primary font-mono text-xs uppercase tracking-widest">Donate</button>
+                <Link to="/login" onClick={() => setIsOpen(false)} className="w-full py-3.5 rounded-full border border-primary/30 text-primary font-mono text-xs uppercase tracking-widest text-center">Login</Link>
                 <button className="w-full py-3.5 rounded-full bg-error text-on-error font-mono text-xs uppercase tracking-widest flex items-center justify-center gap-2">
                   <Phone className="w-4 h-4 fill-current" />
                   Get Help Now
@@ -166,8 +187,8 @@ const Hero = () => (
 
 const ImpactSnapshot = ({ stats }: { stats: Stat | null }) => {
   const statItems = [
-    { label: 'Users Helped', value: stats?.usersHelped || '25,000+', icon: Users, color: 'bg-secondary-container/20 text-secondary' },
-    { label: 'Sessions Completed', value: stats?.sessionsCompleted || '150,000', icon: MessageCircle, color: 'bg-primary-container/40 text-primary' },
+    { label: 'Users Helped', value: stats?.usersHelped || '225', icon: Users, color: 'bg-secondary-container/20 text-secondary' },
+    { label: 'Sessions Completed', value: stats?.sessionsCompleted || '15', icon: MessageCircle, color: 'bg-primary-container/40 text-primary' },
     { label: 'Avg Resilience Improvement', value: stats?.resilienceImprovement || '68%', icon: TrendingUp, color: 'bg-tertiary/20 text-tertiary' },
   ];
 
@@ -268,12 +289,12 @@ const Footer = () => (
   <footer className="bg-surface-container-high pt-24 pb-12 border-t border-white/5">
     <div className="max-w-7xl mx-auto px-6 grid grid-cols-1 md:grid-cols-4 gap-16 mb-20">
       <div className="col-span-1 md:col-span-1">
-        <a href="/" className="flex items-center gap-3 mb-8">
+        <Link to="/" className="flex items-center gap-3 mb-8">
           <div className="bg-secondary-container/20 p-1.5 rounded-lg border border-secondary/30">
             <Brain className="w-5 h-5 text-secondary" />
           </div>
           <span className="text-xl font-heading font-bold text-on-surface tracking-tight uppercase">MindLift</span>
-        </a>
+        </Link>
         <p className="text-on-surface-variant leading-relaxed text-sm mb-6">
           Empowering minds, supporting communities across Ethiopia with professional care and community support.
         </p>
@@ -281,18 +302,33 @@ const Footer = () => (
       </div>
       
       {[
-        { title: 'Organization', links: ['Impact Report 2023', 'Contact Us', 'Our Partners', 'Careers'] },
-        { title: 'Get Involved', links: ['Volunteer Portal', 'Growth Stories', 'Community Events', 'Crisis Toolkit'] },
-        { title: 'Legal', links: ['Privacy Policy', 'Terms of Service', 'Cookie Policy', 'Ethical Guidelines'] }
+        { title: 'Organization', links: [
+          { name: 'Impact Report 2023', path: '/impacts' },
+          { name: 'Contact Us', path: '/contact' },
+          { name: 'Our Partners', path: '/about' },
+          { name: 'Careers', path: '/careers' }
+        ] },
+        { title: 'Get Involved', links: [
+          { name: 'Volunteer Portal', path: '/careers' },
+          { name: 'Growth Stories', path: '/impacts' },
+          { name: 'Community Events', path: '/about' },
+          { name: 'Crisis Toolkit', path: '/resources' }
+        ] },
+        { title: 'Legal', links: [
+          { name: 'Privacy Policy', path: '#' },
+          { name: 'Terms of Service', path: '#' },
+          { name: 'Cookie Policy', path: '#' },
+          { name: 'Ethical Guidelines', path: '#' }
+        ] }
       ].map((section) => (
         <div key={section.title}>
           <h4 className="font-mono text-xs uppercase tracking-[0.2em] text-on-surface font-bold mb-8">{section.title}</h4>
           <ul className="flex flex-col gap-4">
             {section.links.map(link => (
-              <li key={link}>
-                <a href="#" className="text-sm text-on-surface-variant hover:text-primary transition-colors font-medium">
-                  {link}
-                </a>
+              <li key={link.name}>
+                <Link to={link.path} className="text-sm text-on-surface-variant hover:text-primary transition-colors font-medium">
+                  {link.name}
+                </Link>
               </li>
             ))}
           </ul>
@@ -310,13 +346,46 @@ const Footer = () => (
   </footer>
 );
 
+const Home = ({ stats, pillars }: { stats: Stat | null; pillars: Pillar[] }) => (
+  <>
+    <Hero />
+    <ImpactSnapshot stats={stats} />
+    <CorePillars pillars={pillars} />
+    
+    <section className="py-32 bg-primary-container text-on-primary-container text-center px-6 relative overflow-hidden">
+      <div className="absolute top-0 right-0 w-96 h-96 bg-secondary/10 rounded-full blur-[100px] -mr-48 -mt-48" />
+      <div className="absolute bottom-0 left-0 w-96 h-96 bg-primary/10 rounded-full blur-[100px] -ml-48 -mb-48" />
+      
+      <div className="relative z-10 max-w-4xl mx-auto">
+        <h2 className="text-4xl md:text-6xl font-heading font-bold mb-8 leading-tight tracking-tight">Join Us in Building Resilient Communities</h2>
+        <p className="text-lg md:text-xl text-on-primary-container/80 font-medium mb-12 max-w-2xl mx-auto leading-relaxed">
+          Your contribution directly funds accessible mental health resources and professional counseling for those in need across Ethiopia.
+        </p>
+        <div className="flex flex-col sm:flex-row justify-center gap-6">
+          <button className="px-12 py-5 rounded-full bg-on-primary-container text-primary-container font-mono text-xs uppercase tracking-[0.2em] font-bold hover:brightness-110 transition-all shadow-2xl active:scale-95">
+            Support Our Mission
+          </button>
+          <button className="px-12 py-5 rounded-full border border-on-primary-container/20 text-on-primary-container font-mono text-xs uppercase tracking-[0.2em] font-bold hover:bg-on-primary-container/5 transition-all">
+            Become a Volunteer
+          </button>
+        </div>
+      </div>
+    </section>
+  </>
+);
+
 export default function App() {
   const [stats, setStats] = useState<Stat | null>(null);
   const [pillars, setPillars] = useState<Pillar[]>([]);
   const [isDark, setIsDark] = useState(true);
+  const { pathname } = useLocation();
+
+  // Scroll to top on route change
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [pathname]);
 
   useEffect(() => {
-    // Apply theme on mount and when isDark changes
     if (isDark) {
       document.documentElement.classList.add('dark');
     } else {
@@ -348,30 +417,16 @@ export default function App() {
       <Navbar dark={isDark} toggleTheme={() => setIsDark(!isDark)} />
       
       <main>
-        <Hero />
-        <ImpactSnapshot stats={stats} />
-        <CorePillars pillars={pillars} />
-        
-        {/* Modern Call to Action */}
-        <section className="py-32 bg-primary-container text-on-primary-container text-center px-6 relative overflow-hidden">
-          <div className="absolute top-0 right-0 w-96 h-96 bg-secondary/10 rounded-full blur-[100px] -mr-48 -mt-48" />
-          <div className="absolute bottom-0 left-0 w-96 h-96 bg-primary/10 rounded-full blur-[100px] -ml-48 -mb-48" />
-          
-          <div className="relative z-10 max-w-4xl mx-auto">
-            <h2 className="text-4xl md:text-6xl font-heading font-bold mb-8 leading-tight tracking-tight">Join Us in Building Resilient Communities</h2>
-            <p className="text-lg md:text-xl text-on-primary-container/80 font-medium mb-12 max-w-2xl mx-auto leading-relaxed">
-              Your contribution directly funds accessible mental health resources and professional counseling for those in need across Ethiopia.
-            </p>
-            <div className="flex flex-col sm:flex-row justify-center gap-6">
-              <button className="px-12 py-5 rounded-full bg-on-primary-container text-primary-container font-mono text-xs uppercase tracking-[0.2em] font-bold hover:brightness-110 transition-all shadow-2xl active:scale-95">
-                Support Our Mission
-              </button>
-              <button className="px-12 py-5 rounded-full border border-on-primary-container/20 text-on-primary-container font-mono text-xs uppercase tracking-[0.2em] font-bold hover:bg-on-primary-container/5 transition-all">
-                Become a Volunteer
-              </button>
-            </div>
-          </div>
-        </section>
+        <Routes>
+          <Route path="/" element={<Home stats={stats} pillars={pillars} />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/about" element={<AboutUs />} />
+          <Route path="/impacts" element={<Impacts />} />
+          <Route path="/services" element={<Services />} />
+          <Route path="/careers" element={<Careers />} />
+          <Route path="/resources" element={<Resources />} />
+          <Route path="/contact" element={<Contact />} />
+        </Routes>
       </main>
 
       <Footer />
