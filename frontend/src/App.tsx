@@ -53,7 +53,7 @@ const CrisisBanner = () => (
   <div className="bg-error text-on-error px-6 py-2 md:py-3 text-center border-b border-on-error/10">
     <p className="font-mono text-[10px] md:text-xs uppercase tracking-[0.2em] flex items-center justify-center gap-2">
       <PhoneCall className="w-3.5 h-3.5 fill-current" />
-      If you are in immediate distress, please call our 24/7 Crisis Hotline: 800-123-4567
+      If you are in immediate distress, please call our 24/7 Crisis Hotline: +251 902142767
     </p>
   </div>
 );
